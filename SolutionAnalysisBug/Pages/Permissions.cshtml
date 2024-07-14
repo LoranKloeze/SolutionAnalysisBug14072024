@@ -1,0 +1,56 @@
+﻿@page
+@model Permissions
+
+@{
+ViewData["Title"] = "Rechtenoverzicht";
+}
+
+<div class="md:w-3/4 mx-auto">
+    <div class="text-sm mb-5">
+        <a asp-page="./Index">
+            <i class="fa-regular fa-chevron-left mr-2"></i>
+            <span>Terug</span>
+        </a>
+    </div>
+    <h1 class="font-bold text-4xl mb-5">Rechtenoverzicht</h1>
+    <form method="post" id="permissions-form">
+        <table class="">
+            <thead>
+            <tr>
+                <th class="text-left pr-4">Artikel</th>
+                <th class="text-center pr-2">UserRoles.Guest</th>
+                <th class="text-center pr-2">UserRoles.Permanent</th>
+                <th class="text-center pr-2">UserRoles.Flex</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var article in Model.RootArticles)
+            {
+            <tr>
+                <td class="py-1"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr class="text-sm hover:bg-sse-400 transition-colors">
+                <td class="text-left pr-4 align-top">
+                    <a asp-page="/WikiArticles/Details" asp-route-slug="@article.Slug"
+                       class="text-sse-50 hover:text-sse-100 transition-colors block md:inline md:indent-0 md:pl-0 indent-[-0.5rem] pl-[0.5rem] font-bold">@article.Title</a>
+                </td>
+                <td class="text-center pr-2 align-top">
+                    <input type="checkbox" name="Input.Permissions[]" value="@UserRoles.Guest-@article.Id" @(article.RoleNames != null && article.RoleNames.Contains(UserRoles.Guest) ? "checked" : "")/>
+                </td>
+                <td class="text-center pr-2 align-top">
+                    <input type="checkbox" name="Input.Permissions[]" value="@UserRoles.Permanent-@article.Id" @(article.RoleNames != null && article.RoleNames.Contains(UserRoles.Permanent) ? "checked" : "")/>
+                </td>
+                <td class="text-center pr-2 align-top">
+                    <input type="checkbox" name="Input.Permissions[]" value="@UserRoles.Flex-@article.Id" @(article.RoleNames != null && article.RoleNames.Contains(UserRoles.Flex) ? "checked" : "")/>
+                </td>
+            </tr>
+            @await Html.PartialAsync("Shared/_PermissionsChildren", article)
+            }
+            </tbody>
+        </table>
+        <button type="submit" class="submit-button mt-10">Opslaan</button>
+    </form>
+</div>
